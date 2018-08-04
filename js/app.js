@@ -1,6 +1,7 @@
 /*
  * Create a list that holds all of your cards
  */
+let flippedCards = []
 
 
 /*
@@ -24,6 +25,39 @@ function shuffle(array) {
 
     return array;
 }
+
+//flip functionality
+const cards = document.getElementsByClassName('card');
+
+for (card of cards) {
+    card.addEventListener('click', function() {
+        const selection = event.target;
+        var cardOpen = false;
+        if (cardOpen === false) {
+            flipCard(selection);
+            cardOpen = true;
+        }
+    });
+}
+
+function flipCard(selection) {
+    selection.classList.toggle('open');
+    selection.classList.toggle('show');
+}
+
+
+
+//timer functionality
+ const timer = document.querySelector('.timer');
+//timer.textContent = hours+':'+minutes+':'+seconds;
+
+
+
+
+
+
+
+
 
 
 /*
