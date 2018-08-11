@@ -1,8 +1,8 @@
 /*
- * Create a list that holds all of your cards
+ * Create a list that holds all of your cards and define variables
  */
-let flippedCards = []
-
+let openCards = []
+const cards = document.getElementsByClassName('card');
 
 /*
  * Display the cards on the page
@@ -10,6 +10,14 @@ let flippedCards = []
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
+
+ //shuffling functionality
+ function shuffleDeck() {
+     const unshuffled = [].slice.call(document.querySelectorAll('.deck li'));
+     const shuffledCards = shuffle(unshuffled);
+     console.log('Shuffled cards', shuffledCards);
+ }
+ shuffleDeck();
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -27,29 +35,53 @@ function shuffle(array) {
 }
 
 //flip functionality
-const cards = document.getElementsByClassName('card');
-
 for (card of cards) {
     card.addEventListener('click', function() {
         const selection = event.target;
         var cardOpen = false;
-        if (cardOpen === false) {
+        if (cardOpen === false && openCards.length < 2) {
             flipCard(selection);
+            flippedCards(selection);
+            if (openCards.length === 2) {
+                compareCards();
+            }
             cardOpen = true;
         }
     });
 }
 
+
+
+//pushes selected card to array "openCards"
+function flippedCards(selection) {
+    openCards.push(selection);
+    console.log(openCards);
+}
+
+//toggles the card between flipped and unflipped
 function flipCard(selection) {
     selection.classList.toggle('open');
     selection.classList.toggle('show');
 }
 
+//checks selected card for match
+function compareCards() {
+    if (openCards[0].childNodes[1].className === openCards[1].childNodes[1].className) {
+            openCards[0].classList.toggle('match');
+            openCards[1].classList.toggle('match');
+            openCards.splice(0, openCards.length);
+        } else {
+            flipCard(openCards[0]);
+            flipCard(openCards[1]);
+            openCards.splice(0, openCards.length);
+            console.log('No Match');
+        }
+}
 
 
-//timer functionality
+/*timer functionality
  const timer = document.querySelector('.timer');
-//timer.textContent = hours+':'+minutes+':'+seconds;
+ timer.textContent = hours+':'+minutes+':'+seconds;
 
 
 
