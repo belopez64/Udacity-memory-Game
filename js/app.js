@@ -16,15 +16,6 @@ const moveCounter = document.querySelector('.moves');
 const turns = document.querySelector('.text');
 timer.innerHTML = 'Minutes  ' + minutes + ' Seconds  ' + seconds;
 
-
-
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
-
  /*
   *
   *Main Functions
@@ -44,11 +35,18 @@ timer.innerHTML = 'Minutes  ' + minutes + ' Seconds  ' + seconds;
  }
  shuffleDeck();
 
-//flip functionality
+/*flip functionality. Each card goes through the loop and becomes clickable.
+  boolean value ensures code knows at which point to be activated. If the card
+  is not open and the number of the cards in the array is less than two then a
+  function is called to toggle cards into open position, another function is
+  called to add the open cards to an empty array to be matched. Once the array is
+  populated with two cards, the cards are matched, the move counter is incremented
+  and a star is removed if the move count reaches a certain point.
+*/
 for (card of cards) {
     card.addEventListener('click', function() {
         const selection = event.target;
-        var cardOpen = false;
+        let cardOpen = false;
         if (cardOpen === false && openCards.length < 2) {
             flipCard(selection);
             flippedCards(selection);
@@ -61,7 +59,12 @@ for (card of cards) {
     });
 }
 
-//checks selected card for match
+/*checks selected card for match. if the first child node of the two open cards
+  matches then the card is toggled to its 'match' class. the array is then emptied
+  and the number of matched cards is incremented. If the cards do not match a timeout
+  function allows both cards to appear momentarily before being switched back to the
+  closed position. If all cards match, gameOver() is called to display the players stats.
+*/
 function compareCards() {
     if (openCards[0].childNodes[1].className === openCards[1].childNodes[1].className) {
             openCards[0].classList.toggle('match');
@@ -98,7 +101,7 @@ document.querySelector('.modal-replay').addEventListener('click', replay);
 
  // Shuffle function from http://stackoverflow.com/a/2450976
  function shuffle(array) {
-     var currentIndex = array.length, temporaryValue, randomIndex;
+     let currentIndex = array.length, temporaryValue, randomIndex;
 
      while (currentIndex !== 0) {
          randomIndex = Math.floor(Math.random() * currentIndex);
@@ -122,7 +125,7 @@ function flipCard(selection) {
     selection.classList.toggle('show');
 }
 
-//adds moves to the counter
+//adds moves to the counter, if statement used to change "moves" between plural and singular
 function incrementMove() {
     moves++;
     moveCounter.innerHTML = moves;
@@ -214,6 +217,7 @@ function resetCards() {
     for (let card of cards) {
         card.className = 'card';
     }
+    openCards = [];
 }
 
 //function to be run when game is won
@@ -240,14 +244,3 @@ function replay() {
     startTime();
     toggleModal();
 }
-
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
